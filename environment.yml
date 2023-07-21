@@ -5,3 +5,7 @@ channels:
 dependencies:
   - pandas <2
   - bqplot
+  - ipywidgets==8.0.7
+  - numpy==1.25.1
+  - seaborn==0.12.2
+
