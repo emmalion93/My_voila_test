@@ -178,6 +178,7 @@ class MultiQuery(widgets.VBox):
         )
         
         self.ion_dropdown.add_class("top_row_dd1")
+        self.ion_dropdown.addclass("hello")
         self.ion_energy_selector.add_class("top_row_input")
         
         self.add_button = widgets.Button(icon="plus", disabled=False, button_style='success', layout=FixedIconButtonLayout())
