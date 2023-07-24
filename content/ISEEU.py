@@ -202,6 +202,10 @@ class MultiQuery(widgets.VBox):
         
         generate_request_button = widgets.Button(description="Generate Request")
         generate_request_button.on_click(self.generate_request) 
+
+        str = "http://localhost/var/www/html/iseeu/Request?ion=b"
+        
+        webbrowser.open(str, new=0, autoraise=True)
         
         super(MultiQuery, self).__init__([ion, headers, self.layer_container, generate_request_button])
     
