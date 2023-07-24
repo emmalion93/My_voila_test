@@ -8,3 +8,4 @@ dependencies:
   - ipywidgets
   - numpy
   - seaborn
+  - voila-debug
