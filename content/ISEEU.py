@@ -214,7 +214,7 @@ class MultiQuery(widgets.VBox):
 
     def generate_request(self, b):
         ion_list = self.layer_container.get_ions()
-        str = "http://localhost/var/www/html/iseeu/Request/"
+        str = "http://localhost/var/www/html/iseeu/Request?ion="
         str += ion_list
         
         webbrowser.open(str, new=0, autoraise=True)
@@ -673,7 +673,7 @@ class SingleQuery(widgets.VBox):
 
     def generate_request(self, b):
         ion_list = self.ion_dropdown.value
-        str = "http://localhost/var/www/html/iseeu/Request/"
+        str = "http://localhost/var/www/html/iseeu/Request?ion="
         str += ion_list
         
         webbrowser.open(str, new=0, autoraise=True)
