@@ -13,6 +13,7 @@ with warnings.catch_warnings():
     import string
     import pandas as pd
     import seaborn as sns
+    import webbrowser
     
 
 user_data_folder = "../../../srqueriertool_data"
@@ -183,6 +184,9 @@ class MultiQuery(widgets.VBox):
         
         self.add_button = widgets.Button(icon="plus", disabled=False, button_style='success', layout=FixedIconButtonLayout())
         self.add_button.on_click(self.add_button_clicked)
+
+        self.add_button = widgets.Button(icon="minus", disabled=False, button_style='success', layout=FixedIconButtonLayout())
+        self.add_button.on_click(webbrowser.open(http://localhost/var/www/html/iseeu/Request , new=0, autoraise=true))
         
         self.layer_container = LayerContainer(self.ion_dropdown, self.ion_energy_selector)
         self.parent = parent
