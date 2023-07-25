@@ -4,7 +4,7 @@ import warnings
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
 
-    from IPython.display import clear_output, display, HTML
+    import IPython
     import io
     import ipywidgets as widgets
     import matplotlib.pyplot as plt
@@ -184,7 +184,7 @@ class MultiQuery(widgets.VBox):
         
         self.add_button = widgets.Button(icon="plus", disabled=False, button_style='success', layout=FixedIconButtonLayout())
         self.add_button.on_click(self.add_button_clicked)
-        webbrowser.open('http://localhost/var/www/html/iseeu/Request', new=0, autoraise=True)
+        self.window_open("https://radfx-a.research.utc.edu/Request")
         
         self.layer_container = LayerContainer(self.ion_dropdown, self.ion_energy_selector)
         self.parent = parent
@@ -222,6 +222,10 @@ class MultiQuery(widgets.VBox):
         str += ion_list
         
         webbrowser.open(str, new=0, autoraise=True)
+
+    def window_open(url):
+        IPython.display.display(IPython.display.Javascript('window.open("{url}");'.format(url=url)))
+
 
 class LayerContainer(widgets.VBox):
     def __init__(self, ion_dropdown=None, ion_energy_selector=None):
