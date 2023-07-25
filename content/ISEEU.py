@@ -222,9 +222,6 @@ class MultiQuery(widgets.VBox):
         #webbrowser.open(str, new=0, autoraise=True)
         window_open(str)
 
-    def window_open(url):
-        IPython.display.display(IPython.display.Javascript('window.open("{url}");'.format(url=url)))
-
 
 class LayerContainer(widgets.VBox):
     def __init__(self, ion_dropdown=None, ion_energy_selector=None):
