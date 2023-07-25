@@ -4,7 +4,7 @@ import warnings
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
 
-    from IPython.display import clear_output, display, HTML
+    from IPython.display import clear_output, display, HTML, Javascript
     import io
     import ipywidgets as widgets
     import matplotlib.pyplot as plt
@@ -58,6 +58,9 @@ def lookup(t, mat, ion, target):
         
     interp = np.interp(target, (data_slice[index_low], data_slice[index_high]), (0, 1))
     return lookup_interp(mat, ion, index_low, index_high, interp)
+
+def window_open(url):
+    display(Javascript('window.open("{url}");'.format(url=url)))
 
 def lookup_interp(mat, ion, index_low, index_high, interp):
     mat_slice_low = data.loc[(mat, ion)].iloc[index_low]
@@ -184,7 +187,6 @@ class MultiQuery(widgets.VBox):
         
         self.add_button = widgets.Button(icon="plus", disabled=False, button_style='success', layout=FixedIconButtonLayout())
         self.add_button.on_click(self.add_button_clicked)
-        self.window_open("https://radfx-a.research.utc.edu/Request")
         
         self.layer_container = LayerContainer(self.ion_dropdown, self.ion_energy_selector)
         self.parent = parent
@@ -202,10 +204,6 @@ class MultiQuery(widgets.VBox):
         
         generate_request_button = widgets.Button(description="Generate Request")
         generate_request_button.on_click(self.generate_request) 
-
-        str = "http://localhost/var/www/html/iseeu/Request?ion=b"
-        
-        webbrowser.open(str, new=0, autoraise=True)
         
         super(MultiQuery, self).__init__([ion, headers, self.layer_container, generate_request_button])
     
@@ -221,7 +219,8 @@ class MultiQuery(widgets.VBox):
         str = "http://localhost/var/www/html/iseeu/Request?ion="
         str += ion_list
         
-        webbrowser.open(str, new=0, autoraise=True)
+        #webbrowser.open(str, new=0, autoraise=True)
+        window_open(str)
 
     def window_open(url):
         IPython.display.display(IPython.display.Javascript('window.open("{url}");'.format(url=url)))
@@ -684,7 +683,8 @@ class SingleQuery(widgets.VBox):
         str = "http://localhost/var/www/html/iseeu/Request?ion="
         str += ion_list
         
-        webbrowser.open(str, new=0, autoraise=True)
+        #webbrowser.open(str, new=0, autoraise=True)
+        window_open(str)
 
 class DataWidget(widgets.VBox):
     def __init__(self, parent):
