@@ -4,7 +4,7 @@ import warnings
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
 
-    from IPython.display import clear_output, display, HTML, Javascript
+    from IPython.display import clear_output, display, HTML
     import io
     import ipywidgets as widgets
     import matplotlib.pyplot as plt
@@ -13,7 +13,6 @@ with warnings.catch_warnings():
     import string
     import pandas as pd
     import seaborn as sns
-    import webbrowser
     
 
 user_data_folder = "../../../srqueriertool_data"
@@ -58,9 +57,6 @@ def lookup(t, mat, ion, target):
         
     interp = np.interp(target, (data_slice[index_low], data_slice[index_high]), (0, 1))
     return lookup_interp(mat, ion, index_low, index_high, interp)
-
-def window_open(url):
-    display(Javascript('window.open("{url}");'.format(url=url)))
 
 def lookup_interp(mat, ion, index_low, index_high, interp):
     mat_slice_low = data.loc[(mat, ion)].iloc[index_low]
@@ -201,11 +197,7 @@ class MultiQuery(widgets.VBox):
             widgets.Label(value="Exit LET $\;MeV/(mg/cm^2)$",     layout=FixedSizedLayout()),
             self.add_button
         ])
-        
-        generate_request_button = widgets.Button(description="Generate Request")
-        generate_request_button.on_click(self.generate_request) 
-        
-        super(MultiQuery, self).__init__([ion, headers, self.layer_container, generate_request_button])
+        super(MultiQuery, self).__init__([ion, headers, self.layer_container])
     
     def update(self):
         self.ion_dropdown.options = data.index.unique(level="ion")
@@ -213,15 +205,6 @@ class MultiQuery(widgets.VBox):
     
     def add_button_clicked(self, b):
         self.layer_container.add_layer_at(0)
-
-    def generate_request(self, b):
-        ion_list = self.layer_container.get_ions()
-        str = "http://localhost/var/www/html/iseeu/Request?ion="
-        str += ion_list
-        
-        #webbrowser.open(str, new=0, autoraise=True)
-        window_open(str)
-
 
 class LayerContainer(widgets.VBox):
     def __init__(self, ion_dropdown=None, ion_energy_selector=None):
@@ -286,21 +269,6 @@ class LayerContainer(widgets.VBox):
     def update(self):
         for layer in self.layers:
             layer.update()
-
-    def get_materials(self):
-        str = ""
-        if self.ion_energy_selector:
-            for layer in self.layers:
-                if str == "":
-                    str += layer.get_material()
-                else:
-                    str += "," + layer.get_material()
-        return str
-
-    def get_ions(self):
-        str = ""
-        str += self.ion_dropdown.value
-        return str
         
 class MultiQueryLayer(widgets.HBox):
     def __init__(self, parent_container: LayerContainer, index: int):
@@ -413,9 +381,6 @@ class MultiQueryLayer(widgets.HBox):
     
     def update(self):
         self.material.options = data.index.unique(level="mat")
-
-    def get_material(self):
-        return self.material.value
 
 class AttachedFile(widgets.HBox):
     def __init__(self, file, parent):
@@ -645,11 +610,8 @@ class SingleQuery(widgets.VBox):
 
         self.let_controls.children[0].observe(self._let_changed, names='value')
 
-        generate_request_button = widgets.Button(description="Generate Request")
-        generate_request_button.on_click(self.generate_request) 
+        super(SingleQuery, self).__init__([controls, energy_header, self.energy_controls, range_header, self.range_controls, let_header, self.let_controls])#, full_header, self.full_controls])
 
-        super(SingleQuery, self).__init__([controls, energy_header, self.energy_controls, range_header, self.range_controls, let_header, self.let_controls, generate_request_button])#, full_header, self.full_controls])
-    
     def _energy_changed(self, change):
         result = lookup("Energy", self.mat_dropdown.value, self.ion_dropdown.value, self.energy_controls.children[0].value)
         self.energy_controls.children[1].value = result['let']
@@ -674,14 +636,6 @@ class SingleQuery(widgets.VBox):
     def update(self):
         self.mat_dropdown.options = data.index.unique(level="mat")
         self.ion_dropdown.options = data.index.unique(level="ion")
-
-    def generate_request(self, b):
-        ion_list = self.ion_dropdown.value
-        str = "http://localhost/var/www/html/iseeu/Request?ion="
-        str += ion_list
-        
-        #webbrowser.open(str, new=0, autoraise=True)
-        window_open(str)
 
 class DataWidget(widgets.VBox):
     def __init__(self, parent):
