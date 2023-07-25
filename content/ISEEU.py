@@ -4,7 +4,7 @@ import warnings
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
 
-    from IPython.display import clear_output, display, HTML, Javascript
+    from IPython.display import clear_output, display, HTML
     import io
     import ipywidgets as widgets
     import matplotlib.pyplot as plt
